@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="1ak-An-1in">
-    <device id="iPad13_0rounded" orientation="portrait" layout="fullscreen" appearance="light"/>
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -11,9 +11,9 @@
         <!--History-->
         <scene sceneID="uea-P2-psa">
             <objects>
-                <viewController id="34D-84-STK" customClass="StepHistoryViewController" customModule="StepsTrackerApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="34D-84-STK" customClass="StepHistoryViewController" customModule="StepsTrackerApp2" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="vmB-uI-Q3S">
-                        <rect key="frame" x="0.0" y="0.0" width="1032" height="1376"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="History" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Yj-H9-ppm">
@@ -31,7 +31,7 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Daily"/>
                                 <connections>
-                                    <action selector="getDailyHistory:" destination="34D-84-STK" eventType="touchUpInside" id="Y0C-FF-I2I"/>
+                                    <action selector="getDailyHistoryButton:" destination="34D-84-STK" eventType="touchUpInside" id="4TZ-wj-ETd"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BzL-sb-uCT">
@@ -41,7 +41,7 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Weekly"/>
                                 <connections>
-                                    <action selector="getWeeklyHistory:" destination="34D-84-STK" eventType="touchUpInside" id="jiC-uK-2ry"/>
+                                    <action selector="getWeeklyHistoryButton:" destination="34D-84-STK" eventType="touchUpInside" id="2lg-NT-rS6"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iM5-ic-w7e">
@@ -51,7 +51,7 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Monthly"/>
                                 <connections>
-                                    <action selector="getMonthlyHistory:" destination="34D-84-STK" eventType="touchUpInside" id="nNP-sq-YHb"/>
+                                    <action selector="getMonthlyHistoryButton:" destination="34D-84-STK" eventType="touchUpInside" id="JQL-9E-CBu"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Day and Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9vo-7o-vqE">
@@ -106,9 +106,9 @@
         <!--Steps-->
         <scene sceneID="KTa-Lg-Bkl">
             <objects>
-                <viewController id="nvq-Ov-vM3" customClass="StepDataViewController" customModule="StepsTrackerApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="nvq-Ov-vM3" customClass="StepDataViewController" customModule="StepsTrackerApp2" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="bK9-I4-pL9">
-                        <rect key="frame" x="0.0" y="0.0" width="1032" height="1376"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Number of Steps" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yQC-Zr-N7R">
@@ -142,8 +142,7 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Start"/>
                                 <connections>
-                                    <action selector="startTask:" destination="9ed-4z-ZI8" eventType="touchUpInside" id="3Mw-ha-Vbh"/>
-                                    <action selector="startTask:" destination="nvq-Ov-vM3" eventType="touchUpInside" id="Rvu-AP-zng"/>
+                                    <action selector="startTaskButton:" destination="nvq-Ov-vM3" eventType="touchUpInside" id="wiR-8W-dct"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="szI-Zm-4Ru">
@@ -153,8 +152,7 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Stop"/>
                                 <connections>
-                                    <action selector="stopTask:" destination="nvq-Ov-vM3" eventType="touchUpInside" id="Mu8-1M-cJD"/>
-                                    <action selector="stopTask:" destination="9ed-4z-ZI8" eventType="touchUpInside" id="mrg-Lk-nBJ"/>
+                                    <action selector="stopTaskButton:" destination="nvq-Ov-vM3" eventType="touchUpInside" id="3ie-zV-Wsv"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Step Counter" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P2L-yL-bXo">
@@ -171,14 +169,13 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Steps" image="shoeprints.fill" catalog="system" id="vQ5-6T-utz"/>
                     <connections>
-                        <outlet property="caloriesBurntLabel" destination="OAn-7h-wVU" id="6tj-xw-kBI"/>
-                        <outlet property="kmsWalkedLabel" destination="st6-lK-nVB" id="KoN-I1-Gmw"/>
-                        <outlet property="numOfStepsLabel" destination="yQC-Zr-N7R" id="q87-rf-pMD"/>
-                        <outlet property="stepCounterLabel" destination="P2L-yL-bXo" id="6C1-5S-Hcb"/>
+                        <outlet property="caloriesBurntLabel" destination="OAn-7h-wVU" id="wgX-KD-9Ms"/>
+                        <outlet property="kmsWalkedLabel" destination="st6-lK-nVB" id="XC3-Lh-QiG"/>
+                        <outlet property="numOfStepsLabel" destination="yQC-Zr-N7R" id="mIh-37-zaQ"/>
+                        <outlet property="stepCounterLabel" destination="P2L-yL-bXo" id="8zz-7e-YUz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QGj-Sd-Msk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <exit id="9ed-4z-ZI8" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="416.80000000000001" y="-694.00299850074964"/>
         </scene>
@@ -204,9 +201,9 @@
         <!--Settings-->
         <scene sceneID="jmd-zo-6VT">
             <objects>
-                <viewController id="bID-8k-peq" customClass="SettingsViewController" customModule="StepsTrackerApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="bID-8k-peq" customClass="SettingsViewController" customModule="StepsTrackerApp2" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="BmK-uf-4vp">
-                        <rect key="frame" x="0.0" y="0.0" width="1032" height="1376"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Settings" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7nW-JP-hx0">
@@ -232,7 +229,7 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Toggle"/>
                                 <connections>
-                                    <action selector="toggleReminder:" destination="bID-8k-peq" eventType="touchUpInside" id="eVV-Ar-mll"/>
+                                    <action selector="toggleReminderButton:" destination="bID-8k-peq" eventType="touchUpInside" id="CTT-lV-rWs"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Daily Step Goal" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yeu-uC-2ba">
@@ -265,7 +262,7 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Submit"/>
                                 <connections>
-                                    <action selector="stepsSubmit:" destination="bID-8k-peq" eventType="touchUpInside" id="eIa-bG-8wo"/>
+                                    <action selector="stepsSubmitButton:" destination="bID-8k-peq" eventType="touchUpInside" id="eIj-HQ-HCp"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Units: Kms/Miles" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="da9-nP-C3O">
@@ -291,7 +288,7 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Units"/>
                                 <connections>
-                                    <action selector="selectUnitsButton:" destination="bID-8k-peq" eventType="touchUpInside" id="dXy-7w-xeO"/>
+                                    <action selector="selectUnitsButton:" destination="bID-8k-peq" eventType="touchUpInside" id="oYp-tL-H6v"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dY0-MW-i57">
@@ -301,7 +298,7 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Reset History"/>
                                 <connections>
-                                    <action selector="resetHistoryButton:" destination="bID-8k-peq" eventType="touchUpInside" id="5LY-8d-xrg"/>
+                                    <action selector="resetHistoryButton:" destination="bID-8k-peq" eventType="touchUpInside" id="Xrd-RH-6ni"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HJP-kA-aUL">
@@ -311,7 +308,7 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Submit"/>
                                 <connections>
-                                    <action selector="unitsSubmit:" destination="bID-8k-peq" eventType="touchUpInside" id="ijm-hg-kaj"/>
+                                    <action selector="unitsSubmitButton:" destination="bID-8k-peq" eventType="touchUpInside" id="7D3-8Y-DS0"/>
                                 </connections>
                             </button>
                         </subviews>
