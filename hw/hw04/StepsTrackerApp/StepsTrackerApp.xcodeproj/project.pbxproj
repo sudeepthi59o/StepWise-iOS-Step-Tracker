@@ -6,15 +6,8 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		728FE7402DBEBC0C00FAFC6D /* StepEntry+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728FE73F2DBEBC0C00FAFC6D /* StepEntry+CoreDataProperties.swift */; };
-		728FE7412DBEBC0C00FAFC6D /* StepEntry+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728FE73E2DBEBC0C00FAFC6D /* StepEntry+CoreDataClass.swift */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXFileReference section */
 		727013FB2DBE994B0073EF4C /* StepsTrackerApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StepsTrackerApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		728FE73E2DBEBC0C00FAFC6D /* StepEntry+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "StepEntry+CoreDataClass.swift"; path = "StepsTrackerApp/StepEntry+CoreDataClass.swift"; sourceTree = "<group>"; };
-		728FE73F2DBEBC0C00FAFC6D /* StepEntry+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "StepEntry+CoreDataProperties.swift"; path = "StepsTrackerApp/StepEntry+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -52,8 +45,6 @@
 		727013F22DBE994B0073EF4C = {
 			isa = PBXGroup;
 			children = (
-				728FE73E2DBEBC0C00FAFC6D /* StepEntry+CoreDataClass.swift */,
-				728FE73F2DBEBC0C00FAFC6D /* StepEntry+CoreDataProperties.swift */,
 				727013FD2DBE994B0073EF4C /* StepsTrackerApp */,
 				727013FC2DBE994B0073EF4C /* Products */,
 			);
@@ -141,8 +132,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				728FE7402DBEBC0C00FAFC6D /* StepEntry+CoreDataProperties.swift in Sources */,
-				728FE7412DBEBC0C00FAFC6D /* StepEntry+CoreDataClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -156,6 +145,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7BTVUBLB7D;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StepsTrackerApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -183,6 +173,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7BTVUBLB7D;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StepsTrackerApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

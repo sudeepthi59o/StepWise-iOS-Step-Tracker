@@ -21,26 +21,34 @@ class StepDataViewController: UIViewController {
     
     
     @IBAction func startTaskButton(_ sender: Any) {
-        
         self.numOfStepsLabel.text = "0"
+        self.stepCounterLabel.text = "Steps: 0"
+        self.kmsWalkedLabel.text = "0.00 km"
+        self.caloriesBurntLabel.text = "0.00 cal"
 
         self.pedometer.startUpdates(from: Date()) { [weak self] pedometerData, error in
-                    
-        guard let self = self else { return }
-                    if let error = error {
-                        print("Pedometer error: \(error.localizedDescription)")
-                        return
-                    }
-                    
-                    if let steps = pedometerData?.numberOfSteps {
-                        DispatchQueue.main.async {
-                            print("Steps counted: \(steps)")
-                            
-                            self.numOfStepsLabel.text = "\(steps)" //Check if this count stays till next time start button is pressed
-                        }
-                    }
+            guard let self = self else { return }
+
+            if let error = error {
+                print("Pedometer error: \(error.localizedDescription)")
+                return
+            }
+
+            if let steps = pedometerData?.numberOfSteps {
+                let stepInt = steps.intValue
+                let distance = Double(stepInt) * 0.000762 // km
+                let calories = Double(stepInt) * 0.04     // estimated
+
+                DispatchQueue.main.async {
+                    self.numOfStepsLabel.text = "\(stepInt)"
+                    self.stepCounterLabel.text = "Steps: \(stepInt)"
+                    self.kmsWalkedLabel.text = String(format: "%.2f km", distance)
+                    self.caloriesBurntLabel.text = String(format: "%.2f cal", calories)
                 }
             }
+        }
+    }
+
     
     @IBAction func stopTaskButton(_ sender: Any) {
         self.pedometer.stopUpdates()
@@ -64,19 +72,32 @@ class StepDataViewController: UIViewController {
     }
     
     func saveStepData(stepsCount: Int, date: Date, distance: Double, calories: Double) {
-        let stepData = StepEntry(context: managedContext)
-        stepData.stepCount = Int16(stepsCount)
-        stepData.date = date
-        stepData.kmsWalked = distance
-        stepData.calories = calories
-
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return
+        }
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        // Create a new StepEntry entity object
+        let stepEntry = UserstepEntry(context: managedContext)
+        stepEntry.stepCount = Int16(stepsCount)
+        stepEntry.date = date
+        stepEntry.kmsWalked = distance
+        stepEntry.calories = calories
+        
         do {
             try managedContext.save()
-            print("Data saved to Core Data!")
-        } catch {
-            print("Failed to save data: \(error.localizedDescription)")
+            print("Step data saved successfully!")
+            
+            DispatchQueue.main.async {
+                self.kmsWalkedLabel.text = String(format: "%.2f km", distance)
+                self.caloriesBurntLabel.text = String(format: "%.2f cal", calories)
+            }
+            
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
         }
     }
+
 
     
     
