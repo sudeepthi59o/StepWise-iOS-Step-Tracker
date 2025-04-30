@@ -1,8 +1,8 @@
 //
 //  UserstepEntry+CoreDataProperties.swift
-//  StepsTrackerApp
-//
-//  Created by Rajesh Kumar Reddy Avula on 4/29/25.
+//  Sudeepthi Rebbalapalli (surebbal@iu.edu), Rajesh Kumar Reddy Avula (rajavula@iu.edu)
+//  App Name: StepWise
+//  Submission Date: 04/30/25
 //
 //
 

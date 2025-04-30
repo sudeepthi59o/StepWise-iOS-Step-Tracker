@@ -1,8 +1,9 @@
 //
 //  StepDataModel.swift
-//  StepsTrackerApp
+//  Sudeepthi Rebbalapalli (surebbal@iu.edu), Rajesh Kumar Reddy Avula (rajavula@iu.edu)
+//  App Name: StepWise
+//  Submission Date: 04/30/25
 //
-//  Created by Sudeepthi Rebbalapalli on 4/27/25.
 //
 
 import Foundation
