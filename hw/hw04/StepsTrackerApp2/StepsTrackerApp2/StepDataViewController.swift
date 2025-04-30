@@ -136,7 +136,7 @@ class StepDataViewController: UIViewController {
         
         managedContext = appDelegate.persistentContainer.viewContext
         
-        self.stepCounterLabel.text="Step Counter"
+        self.stepCounterLabel.text="StepWise"
         
         self.numOfStepsLabel.text = "0"
         
@@ -145,6 +145,7 @@ class StepDataViewController: UIViewController {
                } else {
                    print("Step counting not available on this device")
                }
+        
            }
     
 
