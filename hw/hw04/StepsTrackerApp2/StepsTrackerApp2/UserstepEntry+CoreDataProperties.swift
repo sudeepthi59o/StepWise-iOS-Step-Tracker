@@ -10,10 +10,10 @@ import Foundation
 import CoreData
 
 
-extension UserstepEntry {
+extension UserStepEntry {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<UserstepEntry> {
-        return NSFetchRequest<UserstepEntry>(entityName: "UserstepEntry")
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<UserStepEntry> {
+        return NSFetchRequest<UserStepEntry>(entityName: "UserStepEntry")
     }
 
     @NSManaged public var calories: Double
@@ -23,6 +23,6 @@ extension UserstepEntry {
 
 }
 
-extension UserstepEntry : Identifiable {
+extension UserStepEntry : Identifiable {
 
 }

@@ -88,7 +88,7 @@ class StepDataModel {
         managedContext = appDelegate.persistentContainer.viewContext
         
         // Create a new UserStepEntry entity object
-        let stepEntry = UserstepEntry(context: managedContext)
+        let stepEntry = UserStepEntry(context: managedContext)
         stepEntry.stepCount = Int16(stepsCount)
         stepEntry.date = date
         stepEntry.kmsWalked = distance
@@ -106,7 +106,7 @@ class StepDataModel {
     
     //Read saved data from persistent storage
     func fetchStepEntries() {
-        let fetchRequest: NSFetchRequest<UserstepEntry> = UserstepEntry.fetchRequest()
+        let fetchRequest: NSFetchRequest<UserStepEntry> = UserStepEntry.fetchRequest()
         
         do {
             let entries = try managedContext.fetch(fetchRequest)

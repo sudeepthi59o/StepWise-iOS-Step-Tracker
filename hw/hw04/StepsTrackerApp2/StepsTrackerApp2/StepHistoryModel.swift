@@ -11,17 +11,17 @@ import CoreData
 
 class StepHistoryModel {
     
-    func fetchDailyStepData() -> [UserstepEntry] {
+    func fetchDailyStepData() -> [UserStepEntry] {
         //Fetch today's step entries and return the date, stepCount, distance and calories over all entries
         return []
     }
     
-    func fetchWeeklyStepData() -> [UserstepEntry] {
+    func fetchWeeklyStepData() -> [UserStepEntry] {
         //Fetch weekly step entries and return the date, stepCount, distance and calories over all entries
         return []
     }
     
-    func fetchMonthlyData() -> [UserstepEntry]{
+    func fetchMonthlyData() -> [UserStepEntry]{
         //Fetch monthly step entries and return the date, stepCount, distance and calories over all entries
         return []
     }
