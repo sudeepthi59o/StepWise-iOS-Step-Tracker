@@ -18,13 +18,15 @@ class StepDataViewController: UIViewController {
     @IBOutlet weak var numOfStepsLabel: UILabel!
     @IBOutlet weak var kmsWalkedLabel: UILabel!
     @IBOutlet weak var caloriesBurntLabel: UILabel!
-    
+    @IBOutlet weak var startButton: UIButton!
+    @IBOutlet weak var stopButton: UIButton!
+
     
     @IBAction func startTaskButton(_ sender: Any) {
         
         print("startTaskButton tapped")
         
-        self.numOfStepsLabel.text = "0"
+        self.numOfStepsLabel.text = "0 \nout of 2000"
         self.kmsWalkedLabel.text = "0.00 km"
         self.caloriesBurntLabel.text = "0.00 cal"
         
@@ -50,7 +52,7 @@ class StepDataViewController: UIViewController {
                     let calories = Double(stepsInt) * 0.04
                 
                 DispatchQueue.main.async {
-                    self.numOfStepsLabel.text = "\(steps)"
+                    self.numOfStepsLabel.text = "\(steps)\n out of 2000"
                     self.kmsWalkedLabel.text = String(format: "%.2f km", distance)
                     self.caloriesBurntLabel.text = String(format: "%.2f cal", calories)
                 }
@@ -125,6 +127,28 @@ class StepDataViewController: UIViewController {
             print("Failed to fetch step entries: \(error)")
         }
     }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        // Round steps label (if desired)
+        numOfStepsLabel.layer.cornerRadius = numOfStepsLabel.frame.height / 2
+        numOfStepsLabel.clipsToBounds = true
+
+        // Make Start button circular
+        startButton.layer.cornerRadius = startButton.frame.size.width / 2
+        startButton.clipsToBounds = true
+        startButton.backgroundColor = UIColor.systemGreen
+        startButton.setTitleColor(.white, for: .normal)
+
+        // Make Stop button circular
+        stopButton.layer.cornerRadius = stopButton.frame.size.width / 2
+        stopButton.clipsToBounds = true
+        stopButton.backgroundColor = UIColor.systemRed
+        stopButton.setTitleColor(.white, for: .normal)
+    }
+
+
 
     
     override func viewDidLoad() {
@@ -136,7 +160,7 @@ class StepDataViewController: UIViewController {
         
         managedContext = appDelegate.persistentContainer.viewContext
         
-        self.stepCounterLabel.text="StepWise"
+        self.stepCounterLabel.text="Stepwise"
         
         self.numOfStepsLabel.text = "0"
         
