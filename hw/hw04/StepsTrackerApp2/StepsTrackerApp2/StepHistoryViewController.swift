@@ -16,6 +16,7 @@ class StepHistoryViewController: UIViewController {
     @IBOutlet weak var caloriesLabel: UILabel!
     @IBOutlet weak var kmsWalkedLabel: UILabel!
     
+    
     @IBAction func getDailyHistoryButton(_ sender: Any) {
         //TODO
     }

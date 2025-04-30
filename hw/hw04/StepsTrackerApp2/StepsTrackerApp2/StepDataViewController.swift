@@ -11,173 +11,82 @@ import CoreData
 
 class StepDataViewController: UIViewController {
     
-    let pedometer = CMPedometer()
-    var managedContext: NSManagedObjectContext!
-
+    var stepDataModel = StepDataModel()
+    
     @IBOutlet weak var stepCounterLabel: UILabel!
     @IBOutlet weak var numOfStepsLabel: UILabel!
     @IBOutlet weak var kmsWalkedLabel: UILabel!
     @IBOutlet weak var caloriesBurntLabel: UILabel!
     @IBOutlet weak var startButton: UIButton!
     @IBOutlet weak var stopButton: UIButton!
-
     
-    @IBAction func startTaskButton(_ sender: Any) {
+    
+    @IBAction func onStartButtonClick(_ sender: Any) {
         
-        print("startTaskButton tapped")
+        print("startButton tapped")
         
-        self.numOfStepsLabel.text = "0 \nout of 2000"
+        self.numOfStepsLabel.text = "0"
         self.kmsWalkedLabel.text = "0.00 km"
         self.caloriesBurntLabel.text = "0.00 cal"
         
-        
-        self.pedometer.startUpdates(from: Date()) { [weak self] pedometerData, error in
-            
-            guard let self = self else { return }
-            
-            if let error = error {
-                print("Pedometer error: \(error.localizedDescription)")
-                return
+        self.stepDataModel.startTrackingSteps(onUpdate: { [weak self] steps, distance, calories in
+            DispatchQueue.main.async {
+                self?.numOfStepsLabel.text = "\(steps)"
+                self?.kmsWalkedLabel.text = String(format: "%.2f km", distance)
+                self?.caloriesBurntLabel.text = String(format: "%.2f cal", calories)
             }
-            
-            if let steps = pedometerData?.numberOfSteps {
-                
-                guard let pedometerData = pedometerData else {
-                        print("Pedometer data is nil")
-                        return
-                    }
-                    
-                    let stepsInt = pedometerData.numberOfSteps.intValue
-                    let distance = Double(stepsInt) * 0.000762
-                    let calories = Double(stepsInt) * 0.04
-                
-                DispatchQueue.main.async {
-                    self.numOfStepsLabel.text = "\(steps)\n out of 2000"
-                    self.kmsWalkedLabel.text = String(format: "%.2f km", distance)
-                    self.caloriesBurntLabel.text = String(format: "%.2f cal", calories)
-                }
-            } else {
-                print("No step data received.")
-            }
-        }
-    }
-
-    
-    @IBAction func stopTaskButton(_ sender: Any) {
-        
-        print("stopTaskButton tapped")
-        
-        self.pedometer.stopUpdates()
-        
-        guard let steps = Int(self.numOfStepsLabel.text ?? "0") else {
-                    print("Failed to parse steps from label")
-                    return
-                }
-                
-        // Estimate distance (e.g., 0.000762 kilometers per step for an average person)
-        let distance = Double(steps) * 0.000762 // in kilometers
-                
-        // Estimate calories burned (e.g., 0.04 calories per step for an average person)
-        let calories = Double(steps) * 0.04
-        
-        print("Stopping task with steps: \(steps), distance: \(distance), calories: \(calories)")
-
-    
-        print("Attempting to save step data...")
-        // Save the step data to Core Data
-        saveStepData(stepsCount: steps, date: Date(), distance: distance, calories: calories)
-        
-        self.fetchStepEntries()
-        
+        }, onError: { error in
+            print("Pedometer error: \(error.localizedDescription)")
+        })
     }
     
-    func saveStepData(stepsCount: Int, date: Date, distance: Double, calories: Double) {
-                
-        // Create a new UserStepEntry entity object
-        let stepEntry = UserstepEntry(context: managedContext)
-        stepEntry.stepCount = Int16(stepsCount)
-        stepEntry.date = date
-        stepEntry.kmsWalked = distance
-        stepEntry.calories = calories
+    
+    @IBAction func onStopButtonClick(_ sender: Any) {
         
-        do {
-            try managedContext.save()
-            print("Step data saved successfully!")
-            
+        print("stopButton tapped")
+        
+        let stepText = self.numOfStepsLabel.text ?? "0"
+        
+        self.stepDataModel.stopTrackingSteps(stepLabelText: stepText) { steps, distance, calories in
             DispatchQueue.main.async {
                 self.kmsWalkedLabel.text = String(format: "%.2f km", distance)
                 self.caloriesBurntLabel.text = String(format: "%.2f cal", calories)
+                print("Stopping task with steps: \(steps), distance: \(distance), calories: \(calories)")
             }
-            
-        } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
         }
-    }
-    
-    //Read saved data
-    func fetchStepEntries() {
-        let fetchRequest: NSFetchRequest<UserstepEntry> = UserstepEntry.fetchRequest()
         
-        do {
-            let entries = try managedContext.fetch(fetchRequest)
-            for entry in entries {
-                print("\(entry.date ?? Date()): \(entry.stepCount) steps, \(entry.kmsWalked) km, \(entry.calories) cal")
-            }
-        } catch {
-            print("Failed to fetch step entries: \(error)")
-        }
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-
+        
         // Round steps label (if desired)
         numOfStepsLabel.layer.cornerRadius = numOfStepsLabel.frame.height / 2
         numOfStepsLabel.clipsToBounds = true
-
+        
         // Make Start button circular
         startButton.layer.cornerRadius = startButton.frame.size.width / 2
         startButton.clipsToBounds = true
         startButton.backgroundColor = UIColor.systemGreen
         startButton.setTitleColor(.white, for: .normal)
-
+        
         // Make Stop button circular
         stopButton.layer.cornerRadius = stopButton.frame.size.width / 2
         stopButton.clipsToBounds = true
         stopButton.backgroundColor = UIColor.systemRed
         stopButton.setTitleColor(.white, for: .normal)
     }
-
-
-
+    
+    
+    
     
     override func viewDidLoad() {
         
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-                    print("Failed to get AppDelegate")
-                    return
-                }
-        
-        managedContext = appDelegate.persistentContainer.viewContext
-        
         self.stepCounterLabel.text="Stepwise"
+        self.stepDataModel.isStepCountingAvailable()
         
-        self.numOfStepsLabel.text = "0"
-        
-        if CMPedometer.isStepCountingAvailable() {
-            print("Step counting is available on this device")
-               } else {
-                   print("Step counting not available on this device")
-               }
-        
-           }
-    
-
-
-    deinit {
-        print("StepDataViewController deinitialized — stopping pedometer")
-        self.pedometer.stopUpdates()
-        }
     }
-
-
+    
+    }
+    
+    

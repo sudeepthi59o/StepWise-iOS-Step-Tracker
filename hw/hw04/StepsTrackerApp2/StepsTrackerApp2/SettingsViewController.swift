@@ -16,27 +16,27 @@ class SettingsViewController: UIViewController {
     @IBOutlet weak var dailyStepCountGoal: UITextField!
     
     @IBAction func toggleReminderButton(_ sender: Any) {
-        //TODO
+        //Modify the value of the SettingsModel.toggleOn
+        //This is a toggle button
     }
     
     @IBAction func stepsSubmitButton(_ sender: Any) {
-        //TODO
+        //Modify the value of the SettingsModel.dailyStepGoal
 
     }
     
-    
     @IBAction func unitsSubmitButton(_ sender: Any) {
-        //TODO
+        //Modify the value of the SettingsModel.selectedUnits
 
     }
     
     @IBAction func selectUnitsButton(_ sender: Any) {
-        //TODO
+        //Select the preferred units for distance
 
     }
     
     @IBAction func resetHistoryButton(_ sender: Any) {
-        //TODO
+        //Clear the persistent storage/historical records
 
     }
     override func viewDidLoad() {
