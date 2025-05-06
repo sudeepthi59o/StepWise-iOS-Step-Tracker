@@ -18,11 +18,11 @@ struct MainTabView: View {
                     Label("Home", systemImage: "house")
                 }
 
-//            StepHistoryView(model: StepHistoryModel(context: viewContext))
-//                .tabItem {
-//                    Label("History", systemImage: "figure.walk")
-//                }
-//            
+            StepHistoryView(model: StepHistoryModel(context: viewContext))
+                .tabItem {
+                    Label("History", systemImage: "figure.walk")
+                }
+            
             SettingsView(viewModel: SettingsModel())
                     .tabItem {
                         Label("Settings", systemImage: "gearshape")
