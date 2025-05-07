@@ -14,6 +14,10 @@ class SettingsController: ObservableObject {
     
     private let context: NSManagedObjectContext
     
+    @Published var notificationStatusMessage: String? = nil
+    
+    
+    
     @Published var toggleOn: Bool {
             didSet {
                 UserDefaults.standard.set(toggleOn, forKey: "toggleOn")
@@ -23,12 +27,22 @@ class SettingsController: ObservableObject {
         
     
     func handleNotificationToggleChange() {
-            if toggleOn {
-                enableNotifications()
-            } else {
-                disableNotifications()
-            }
+        if toggleOn {
+            enableNotifications()
+            showTemporaryStatusMessage("Notifications Enabled")
+        } else {
+            disableNotifications()
+            showTemporaryStatusMessage("Notifications Disabled")
         }
+    }
+
+    private func showTemporaryStatusMessage(_ message: String) {
+        notificationStatusMessage = message
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+            self.notificationStatusMessage = nil
+        }
+    }
+
     
     private func enableNotifications() {
             UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
@@ -65,8 +79,16 @@ class SettingsController: ObservableObject {
     }
     
     @Published var selectedUnits: String {
-        didSet { UserDefaults.standard.set(selectedUnits, forKey: "selectedUnits") }
+        didSet {
+            if selectedUnits != oldValue {
+                UserDefaults.standard.set(selectedUnits, forKey: "selectedUnits")
+            }
+        }
     }
+
+    private var previousUnits: String
+
+
     
     init(context: NSManagedObjectContext) {
         self.context=context
@@ -77,8 +99,17 @@ class SettingsController: ObservableObject {
                 self.toggleOn = UserDefaults.standard.bool(forKey: "toggleOn")
             }
         self.dailyStepGoal = UserDefaults.standard.integer(forKey: "dailyStepGoal")
-        self.selectedUnits = UserDefaults.standard.string(forKey: "selectedUnits") ?? "kms"
+        let units = UserDefaults.standard.string(forKey: "selectedUnits") ?? "kms"
+            self.selectedUnits = units
+            self.previousUnits = units
     }
+    
+    func submitUnitsIfChanged() {
+            if previousUnits != selectedUnits {
+                previousUnits = selectedUnits // update tracker
+                showTemporaryStatusMessage("Units updated to \(selectedUnits.capitalized)")
+            }
+        }
     
     func checkIfValidGoal() -> Bool {
         return self.dailyStepGoal >= 1000 && self.dailyStepGoal <= 100000

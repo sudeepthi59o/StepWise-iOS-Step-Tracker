@@ -61,13 +61,14 @@ struct SettingsView: View {
                             }
                             
                             Button(action: {
-                                if settingsController.checkIfValidGoal() {
-                                    print("Goal updated")
+                                if settingsController.checkIfValidUnits() {
+                                    settingsController.submitUnitsIfChanged()
                                 }
                             }) {
-                                Label("Submit Goal", systemImage: "checkmark.circle.fill")
+                                Label("Submit Units", systemImage: "checkmark.circle.fill")
                                     .foregroundColor(.blue)
                             }
+
                         }
                         .listRowBackground(Color.white.opacity(0.2))
                     
@@ -81,12 +82,16 @@ struct SettingsView: View {
                             
                             Button(action: {
                                 if settingsController.checkIfValidUnits() {
-                                    print("Units updated")
+                                    settingsController.notificationStatusMessage = "Units updated successfully!"
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                                        settingsController.notificationStatusMessage = nil
+                                    }
                                 }
                             }) {
                                 Label("Submit Units", systemImage: "checkmark.circle.fill")
                                     .foregroundColor(.blue)
                             }
+
                         }
                         .listRowBackground(Color.white.opacity(0.2))
                     
@@ -104,6 +109,23 @@ struct SettingsView: View {
                 .navigationTitle("Settings")
                 .listStyle(InsetGroupedListStyle())
             }
+            
+            if let message = settingsController.notificationStatusMessage {
+                VStack {
+                    Spacer()
+                    Text(message)
+                        .font(.subheadline)
+                        .padding()
+                        .background(Color.black.opacity(0.75))
+                        .foregroundColor(.white)
+                        .cornerRadius(12)
+                        .padding(.bottom, 40)
+                        .transition(.opacity)
+                        .animation(.easeInOut, value: settingsController.notificationStatusMessage)
+                }
+            }
+
+            
         }
     }
 }
