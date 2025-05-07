@@ -12,20 +12,19 @@ struct MetricRow: View {
     let label: String
     let value: String
     
-    @State private var selectedUnits: String = UserDefaults.standard.string(forKey: "selectedUnits") ?? "kms"
+    @State private var selectedUnits: String = UserDefaults.standard.string(forKey: "selectedUnits") ?? "n"
     
     private func convertToMiles(kilometers: Double) -> Double {
         return kilometers * 0.621371
     }
     
     private func formattedValue() -> String {
-        
         let doubleValue = Double(self.value) ?? 0.0
         if self.selectedUnits == "miles" {
             let miles = convertToMiles(kilometers: doubleValue)
             return String(format: "%.2f miles", miles)
         } else {
-            return String(format: "%.2f km", value)
+            return String(format: "%.2f km", doubleValue)
         }
     }
     
@@ -40,7 +39,7 @@ struct MetricRow: View {
                 Text(label)
                     .font(.caption)
                     .foregroundColor(.white.opacity(0.7))
-                Text(value)
+                Text(label.lowercased().contains("distance") ? formattedValue() : value)
                     .font(.title3.bold())
                     .foregroundColor(.white)
             }

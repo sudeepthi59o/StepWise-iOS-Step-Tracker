@@ -97,6 +97,7 @@ class SettingsController: ObservableObject {
             try self.context.execute(batchDeleteRequest)
             try self.context.save()
             print("History cleared.")
+            UserDefaults.standard.set(false, forKey: "hasInsertedFakeSteps")
         } catch {
             print("Failed to delete history: \(error)")
         }

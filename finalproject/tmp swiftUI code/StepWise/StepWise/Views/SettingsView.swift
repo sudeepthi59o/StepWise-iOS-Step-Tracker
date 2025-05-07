@@ -16,9 +16,6 @@ struct SettingsView: View {
                            startPoint: .topLeading,
                            endPoint: .bottomTrailing)
             .ignoresSafeArea()
-            .onTapGesture {
-                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-            }
             
             VStack {
                 Text("Settings")
@@ -48,9 +45,17 @@ struct SettingsView: View {
                                     .multilineTextAlignment(.trailing)
                                     .frame(width: 80)
                                     .padding(6)
-                                    .background(Color.white.opacity(0.1)) 
+                                    .background(Color.white.opacity(0.1))
                                     .cornerRadius(8)
                                     .foregroundColor(.white)
+                                    .toolbar {
+                                            ToolbarItem(placement: .keyboard) {
+                                                Button("Done") {
+                                                    // Dismiss keyboard when Done is tapped
+                                                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                                }
+                                            }
+                                        }
                                 
                                 
                             }
@@ -95,7 +100,7 @@ struct SettingsView: View {
                     }
                     .listRowBackground(Color.white.opacity(0.2))
                 }
-                .scrollContentBackground(.hidden) 
+                .scrollContentBackground(.hidden)
                 .navigationTitle("Settings")
                 .listStyle(InsetGroupedListStyle())
             }
