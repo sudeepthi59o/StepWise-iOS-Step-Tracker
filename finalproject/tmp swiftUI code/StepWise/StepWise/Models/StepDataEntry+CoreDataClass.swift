@@ -1,9 +1,8 @@
 //
 //  StepDataEntry+CoreDataClass.swift
-//  StepWise
-//
-//  Created by Sudeepthi Rebbalapalli on 5/5/25.
-//
+//  Sudeepthi Rebbalapalli (surebbal@iu.edu), Rajesh Kumar Reddy Avula (rajavula@iu.edu)
+//  App Name: StepWise
+//  Submission Date: 05/07/25
 //
 
 import Foundation

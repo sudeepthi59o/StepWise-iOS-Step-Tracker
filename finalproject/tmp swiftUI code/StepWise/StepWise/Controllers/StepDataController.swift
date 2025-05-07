@@ -1,15 +1,17 @@
 //
-//  StepDataModel.swift
-//  StepWise
+//  StepDataController.swift
+//  Sudeepthi Rebbalapalli (surebbal@iu.edu), Rajesh Kumar Reddy Avula (rajavula@iu.edu)
+//  App Name: StepWise
+//  Submission Date: 05/07/25
 //
-//  Created by Sudeepthi Rebbalapalli on 5/4/25.
 //
 
 import Foundation
 import CoreMotion
 import CoreData
+import UserNotifications
 
-class StepDataModel: ObservableObject {
+class StepDataController: ObservableObject {
     
     private let pedometer = CMPedometer()
     private let context: NSManagedObjectContext
@@ -24,13 +26,13 @@ class StepDataModel: ObservableObject {
         self.context = context
         self.loadSavedStepsIfNeeded()
         self.recoverUnstoppedSessionIfNeeded()
+        self.resetGoalNotificationIfNeeded()
     }
     
     
-    // Start step tracking
     func startTrackingSteps() {
         print("Starting step tracking...")
-        self.isStepCountingAvailable()
+        isStepCountingAvailable()
         
         let now = Date()
         UserDefaults.standard.set(now, forKey: startTimeKey)
@@ -43,53 +45,48 @@ class StepDataModel: ObservableObject {
             }
             DispatchQueue.main.async {
                 self.stepCount = data.numberOfSteps.intValue
-                self.distance = self.calculateDistance(steps: self.stepCount)
-                self.calories = self.calculateCalories(steps: self.stepCount)
+                self.distance = StepDataModel.calculateDistance(steps: self.stepCount)
+                self.calories = StepDataModel.calculateCalories(steps: self.stepCount)
                 
                 print("Updated step count: \(self.stepCount), distance: \(self.distance), calories: \(self.calories)")
+                
+                self.checkAndSendGoalNotification()
+                
             }
         }
     }
     
     func stopTrackingSteps() {
         print("Stopping step tracking...")
-        self.pedometer.stopUpdates()
-        self.queryAndSaveStepData()
+        pedometer.stopUpdates()
+        queryAndSaveStepData()
         UserDefaults.standard.removeObject(forKey: startTimeKey)
         print("Step tracking stopped and data saved.")
-    }
-    
-    private func calculateDistance(steps: Int) -> Double {
-        return Double(steps) * 0.000762 // 0.000762 km per step
-    }
-    
-    private func calculateCalories(steps: Int) -> Double {
-        return Double(steps) * 0.04 // 0.04 calories per step
     }
     
     private func loadSavedStepsIfNeeded() {
         guard let startTime = UserDefaults.standard.object(forKey: startTimeKey) as? Date else { return }
         print("Loading saved step data from: \(startTime)")
-        self.fetchPedometerData(from: startTime, to: Date())
+        fetchPedometerData(from: startTime, to: Date())
     }
     
     private func queryAndSaveStepData() {
         guard let startTime = UserDefaults.standard.object(forKey: startTimeKey) as? Date else { return }
         print("Querying and saving step data from: \(startTime) to \(Date())")
-        self.fetchPedometerData(from: startTime, to: Date(), shouldSave: true)
+        fetchPedometerData(from: startTime, to: Date(), shouldSave: true)
     }
     
     private func fetchPedometerData(from: Date, to: Date, shouldSave: Bool = false) {
         print("Querying pedometer data from \(from) to \(to)")
-        self.pedometer.queryPedometerData(from: from, to: to) { [weak self] data, error in
+        pedometer.queryPedometerData(from: from, to: to) { [weak self] data, error in
             guard let self = self, let data = data, error == nil else {
                 print("Query error: \(error?.localizedDescription ?? "Unknown error")")
                 return
             }
             DispatchQueue.main.async {
                 self.stepCount = data.numberOfSteps.intValue
-                self.distance = self.calculateDistance(steps: self.stepCount)
-                self.calories = self.calculateCalories(steps: self.stepCount)
+                self.distance = StepDataModel.calculateDistance(steps: self.stepCount)
+                self.calories = StepDataModel.calculateCalories(steps: self.stepCount)
                 print("Queried step count: \(self.stepCount), distance: \(self.distance), calories: \(self.calories)")
                 if shouldSave {
                     self.saveStepData()
@@ -112,11 +109,11 @@ class StepDataModel: ObservableObject {
                 
                 DispatchQueue.main.async {
                     self.stepCount = data.numberOfSteps.intValue
-                    self.distance = self.calculateDistance(steps: self.stepCount)
-                    self.calories = self.calculateCalories(steps: self.stepCount)
+                    self.distance = StepDataModel.calculateDistance(steps: self.stepCount)
+                    self.calories = StepDataModel.calculateCalories(steps: self.stepCount)
                     self.saveStepData()
                     
-                    print("Recovered session data: step count: \(self.stepCount), distance: \(self.distance), calories: \(self.calories)")  // Debug
+                    print("Recovered session data: step count: \(self.stepCount), distance: \(self.distance), calories: \(self.calories)")
                     UserDefaults.standard.removeObject(forKey: self.startTimeKey)
                 }
             }
@@ -124,7 +121,6 @@ class StepDataModel: ObservableObject {
     }
     
     
-    // Save the current step data to Core Data
     func saveStepData() {
         print("Saving step data to Core Data...")
         let newStepDataEntry = StepDataEntry(context: context)
@@ -133,7 +129,6 @@ class StepDataModel: ObservableObject {
         newStepDataEntry.kmsWalked = self.distance
         newStepDataEntry.caloriesBurnt = self.calories
         
-        // Save the context to persist data
         do {
             try context.save()
             print("Step data saved successfully.")
@@ -142,7 +137,50 @@ class StepDataModel: ObservableObject {
         }
     }
     
-    func isStepCountingAvailable(){
+    private func triggerGoalNotification() {
+        let content = UNMutableNotificationContent()
+        content.title = " Goal Achieved!"
+        content.body = "You've reached your step goal for today!"
+        content.sound = UNNotificationSound.default
+        
+        let request = UNNotificationRequest(identifier: UUID().uuidString,
+                                            content: content,
+                                            trigger: nil)
+        
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                print("Failed to schedule notification: \(error)")
+            }
+        }
+    }
+    
+    private func resetGoalNotificationIfNeeded() {
+        let today = Calendar.current.startOfDay(for: Date())
+        let lastDateKey = "lastNotificationDate"
+        
+        if let lastDate = UserDefaults.standard.object(forKey: lastDateKey) as? Date {
+            if !Calendar.current.isDate(today, inSameDayAs: lastDate) {
+                UserDefaults.standard.set(false, forKey: "goalNotificationSent")
+                UserDefaults.standard.set(today, forKey: lastDateKey)
+            }
+        } else {
+            UserDefaults.standard.set(false, forKey: "goalNotificationSent")
+            UserDefaults.standard.set(today, forKey: lastDateKey)
+        }
+    }
+    
+    private func checkAndSendGoalNotification() {
+        let goal = UserDefaults.standard.integer(forKey: "dailyStepGoal")
+        if !UserDefaults.standard.bool(forKey: "goalNotificationSent"),
+           stepCount >= goal {
+            triggerGoalNotification()
+            UserDefaults.standard.set(true, forKey: "goalNotificationSent")
+        }
+    }
+    
+    
+    
+    private func isStepCountingAvailable(){
         if CMPedometer.isStepCountingAvailable() {
             print("Step counting is available on this device")
         } else {

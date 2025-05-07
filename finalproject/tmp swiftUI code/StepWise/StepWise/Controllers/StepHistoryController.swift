@@ -1,14 +1,15 @@
 //
-//  StepHistoryModel.swift
-//  StepWise
+//  StepHistoryController.swift
+//  Sudeepthi Rebbalapalli (surebbal@iu.edu), Rajesh Kumar Reddy Avula (rajavula@iu.edu)
+//  App Name: StepWise
+//  Submission Date: 05/07/25
 //
-//  Created by Sudeepthi Rebbalapalli on 5/4/25.
 //
 
 import Foundation
 import CoreData
 
-class StepHistoryModel: ObservableObject {
+class StepHistoryController: ObservableObject {
     
     private let context: NSManagedObjectContext
     private let calendar = Calendar.current
@@ -19,18 +20,6 @@ class StepHistoryModel: ObservableObject {
         self.context = context
         self.formatter = DateFormatter()
         self.createAndSaveFakeStepData()  //For display purposes we add some fake data
-    }
-    
-    enum TimePeriod {
-        case daily
-        case weekly
-        case monthly
-    }
-    
-    struct ChartEntry: Identifiable {
-        let id = UUID()
-        let label: String
-        let stepCount: Int
     }
     
     func generateChartData(for period: TimePeriod) -> [ChartEntry] {
@@ -79,26 +68,20 @@ class StepHistoryModel: ObservableObject {
                 calendar.startOfDay(for: $0.date ?? Date())
             }
             
-            print("Grouped monthly entries: \(grouped.count) groups")
+            print("Grouped weekly entries: \(grouped.count) groups")
             
-            let step = 4 //Every third day
-            
-            return grouped.sorted { $0.key < $1.key }.enumerated().compactMap { (index, entry) in
-                let (date, group) = entry
+            return grouped.sorted { $0.key < $1.key }.map { (date, group) in
+                let label = formatter.string(from: date)
+                let total = group.reduce(0) { $0 + Int($1.stepCount) }
                 
-                if index % step == 0 || index == grouped.count - 1 { // Always show the last day
-                    let label = formatter.string(from: date)
-                    let total = group.reduce(0) { $0 + Int($1.stepCount) }
-                    
-                    print("Monthly - \(label): \(total) steps")
-                    return ChartEntry(label: label, stepCount: total)
-                }
-                return nil
+                
+                print("Monthly - \(label): \(total) steps")
+                return ChartEntry(label: label, stepCount: total)
             }
         }
     }
     
-    func fetchStepData(for period: TimePeriod) -> [StepDataEntry] {
+    private func fetchStepData(for period: TimePeriod) -> [StepDataEntry] {
         let fetchRequest: NSFetchRequest<StepDataEntry> = StepDataEntry.fetchRequest()
         let now = Date()
         
@@ -136,7 +119,7 @@ class StepHistoryModel: ObservableObject {
     }
     
     
-    func createAndSaveFakeStepData() -> Void {
+    private func createAndSaveFakeStepData() -> Void {
         if UserDefaults.standard.bool(forKey: fakeDataKey) {
             print("Fake data already inserted")
             return
@@ -150,8 +133,8 @@ class StepHistoryModel: ObservableObject {
             let entry = StepDataEntry(context: context)
             entry.date = calendar.date(byAdding: .day, value: -dayOffset, to: now)
             entry.stepCount = Int16(Int.random(in: 3000...12000))
-            entry.kmsWalked = Double(entry.stepCount) * 0.000762
-            entry.caloriesBurnt = Double(entry.stepCount) * 0.04
+            entry.kmsWalked = StepDataModel.calculateDistance(steps:Int(entry.stepCount))
+            entry.caloriesBurnt = StepDataModel.calculateCalories(steps: Int(entry.stepCount))
             entries.append(entry)
             print("Inserted fake entry for \(formatter.string(from: entry.date!)): \(entry.stepCount) steps")
         }

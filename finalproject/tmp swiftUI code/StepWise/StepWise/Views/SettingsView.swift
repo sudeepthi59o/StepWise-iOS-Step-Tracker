@@ -1,15 +1,24 @@
+//
+//  SettingsView.swift
+//  Sudeepthi Rebbalapalli (surebbal@iu.edu), Rajesh Kumar Reddy Avula (rajavula@iu.edu)
+//  App Name: StepWise
+//  Submission Date: 05/07/25
+//
+
 import SwiftUI
 
 struct SettingsView: View {
-    @ObservedObject var viewModel: SettingsModel
-
+    @ObservedObject var settingsController: SettingsController
+    
     var body: some View {
         ZStack {
-            // Match HomeView's background
             LinearGradient(gradient: Gradient(colors: [.mint, .cyan]),
                            startPoint: .topLeading,
                            endPoint: .bottomTrailing)
             .ignoresSafeArea()
+            .onTapGesture {
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+            }
             
             VStack {
                 Text("Settings")
@@ -21,7 +30,7 @@ struct SettingsView: View {
                 List {
                     Section(header: Text("Reminders")
                         .foregroundColor(.white)) {
-                            Toggle(isOn: $viewModel.toggleOn) {
+                            Toggle(isOn: $settingsController.toggleOn) {
                                 Label("Enable Daily Reminder", systemImage: "bell.fill")
                                     .foregroundColor(.white)
                             }
@@ -34,14 +43,20 @@ struct SettingsView: View {
                                 Text("Daily Step Goal:")
                                     .foregroundColor(.white)
                                 Spacer()
-                                TextField("e.g. 5000", value: $viewModel.dailyStepGoal, formatter: NumberFormatter())
+                                TextField("e.g. 5000", value: $settingsController.dailyStepGoal, formatter: NumberFormatter())
                                     .keyboardType(.numberPad)
                                     .multilineTextAlignment(.trailing)
                                     .frame(width: 80)
+                                    .padding(6)
+                                    .background(Color.white.opacity(0.1)) 
+                                    .cornerRadius(8)
+                                    .foregroundColor(.white)
+                                
+                                
                             }
                             
                             Button(action: {
-                                if viewModel.checkIfValidGoal() {
+                                if settingsController.checkIfValidGoal() {
                                     print("Goal updated")
                                 }
                             }) {
@@ -53,14 +68,14 @@ struct SettingsView: View {
                     
                     Section(header: Text("Units")
                         .foregroundColor(.white)) {
-                            Picker("Preferred Units", selection: $viewModel.selectedUnits) {
+                            Picker("Preferred Units", selection: $settingsController.selectedUnits) {
                                 Text("Kilometers").tag("kms")
                                 Text("Miles").tag("miles")
                             }
                             .pickerStyle(SegmentedPickerStyle())
                             
                             Button(action: {
-                                if viewModel.checkIfValidUnits() {
+                                if settingsController.checkIfValidUnits() {
                                     print("Units updated")
                                 }
                             }) {
@@ -72,7 +87,7 @@ struct SettingsView: View {
                     
                     Section {
                         Button(role: .destructive) {
-                            viewModel.deleteHistory()
+                            settingsController.deleteHistory()
                         } label: {
                             Label("Reset Step History", systemImage: "trash.fill")
                                 .foregroundColor(.red)
@@ -80,7 +95,7 @@ struct SettingsView: View {
                     }
                     .listRowBackground(Color.white.opacity(0.2))
                 }
-                .scrollContentBackground(.hidden) // Makes list background transparent
+                .scrollContentBackground(.hidden) 
                 .navigationTitle("Settings")
                 .listStyle(InsetGroupedListStyle())
             }
@@ -90,6 +105,6 @@ struct SettingsView: View {
 
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsView(viewModel: SettingsModel())
+        SettingsView(settingsController: SettingsController(context: PersistenceController.shared.container.viewContext))
     }
 }
