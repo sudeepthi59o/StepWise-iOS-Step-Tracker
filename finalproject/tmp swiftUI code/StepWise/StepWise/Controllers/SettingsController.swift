@@ -16,14 +16,40 @@ class SettingsController: ObservableObject {
     
     @Published var notificationStatusMessage: String? = nil
     
-    
-    
     @Published var toggleOn: Bool {
             didSet {
                 UserDefaults.standard.set(toggleOn, forKey: "toggleOn")
                 handleNotificationToggleChange()
             }
         }
+    
+    @Published var dailyStepGoal: Int {
+        didSet { UserDefaults.standard.set(dailyStepGoal, forKey: "dailyStepGoal") }
+    }
+    
+    @Published var selectedUnits: String {
+        didSet {
+            if selectedUnits != oldValue {
+                UserDefaults.standard.set(selectedUnits, forKey: "selectedUnits")
+            }
+        }
+    }
+
+    private var previousUnits: String
+    
+    init(context: NSManagedObjectContext) {
+        self.context=context
+        if UserDefaults.standard.object(forKey: "toggleOn") == nil {
+                self.toggleOn = true
+                UserDefaults.standard.set(true, forKey: "toggleOn")
+            } else {
+                self.toggleOn = UserDefaults.standard.bool(forKey: "toggleOn")
+            }
+        self.dailyStepGoal = UserDefaults.standard.integer(forKey: "dailyStepGoal")
+        let units = UserDefaults.standard.string(forKey: "selectedUnits") ?? "kms"
+            self.selectedUnits = units
+            self.previousUnits = units
+    }
         
     
     func handleNotificationToggleChange() {
@@ -71,38 +97,6 @@ class SettingsController: ObservableObject {
            let request = UNNotificationRequest(identifier: "notificationDisabled", content: content, trigger: trigger)
            UNUserNotificationCenter.current().add(request)
        }
-    
-    
-    
-    @Published var dailyStepGoal: Int {
-        didSet { UserDefaults.standard.set(dailyStepGoal, forKey: "dailyStepGoal") }
-    }
-    
-    @Published var selectedUnits: String {
-        didSet {
-            if selectedUnits != oldValue {
-                UserDefaults.standard.set(selectedUnits, forKey: "selectedUnits")
-            }
-        }
-    }
-
-    private var previousUnits: String
-
-
-    
-    init(context: NSManagedObjectContext) {
-        self.context=context
-        if UserDefaults.standard.object(forKey: "toggleOn") == nil {
-                self.toggleOn = true
-                UserDefaults.standard.set(true, forKey: "toggleOn")
-            } else {
-                self.toggleOn = UserDefaults.standard.bool(forKey: "toggleOn")
-            }
-        self.dailyStepGoal = UserDefaults.standard.integer(forKey: "dailyStepGoal")
-        let units = UserDefaults.standard.string(forKey: "selectedUnits") ?? "kms"
-            self.selectedUnits = units
-            self.previousUnits = units
-    }
     
     func submitUnitsIfChanged() {
             if previousUnits != selectedUnits {

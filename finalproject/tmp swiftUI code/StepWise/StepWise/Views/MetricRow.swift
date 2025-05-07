@@ -11,8 +11,8 @@ struct MetricRow: View {
     let icon: String
     let label: String
     let value: String
-    
-    @State private var selectedUnits: String = UserDefaults.standard.string(forKey: "selectedUnits") ?? "n"
+
+    @AppStorage("selectedUnits") private var selectedUnits: String = "kms"
     
     private func convertToMiles(kilometers: Double) -> Double {
         return kilometers * 0.621371

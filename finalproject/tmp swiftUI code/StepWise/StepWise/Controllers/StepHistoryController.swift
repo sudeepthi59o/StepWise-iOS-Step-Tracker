@@ -63,21 +63,38 @@ class StepHistoryController: ObservableObject {
             }
             
         case .monthly:
-            formatter.dateFormat = "MMM d" // Jan 1, Jan 2...
-            let grouped = Dictionary(grouping: entries) {
-                calendar.startOfDay(for: $0.date ?? Date())
+            let calendar = Calendar.current
+            
+            let grouped = Dictionary(grouping: entries) { entry -> String in
+                guard let date = entry.date else { return "Week 1" }
+                let day = calendar.component(.day, from: date)
+                
+                switch day {
+                case 1...7:
+                    return "Week 1"
+                case 8...14:
+                    return "Week 2"
+                case 15...21:
+                    return "Week 3"
+                case 22...31:
+                    return "Week 4"
+                default:
+                    return "Unknown"
+                }
             }
             
-            print("Grouped weekly entries: \(grouped.count) groups")
-            
-            return grouped.sorted { $0.key < $1.key }.map { (date, group) in
-                let label = formatter.string(from: date)
-                let total = group.reduce(0) { $0 + Int($1.stepCount) }
-                
-                
-                print("Monthly - \(label): \(total) steps")
-                return ChartEntry(label: label, stepCount: total)
+            print("Grouped into 4 weeks: \(grouped.count) groups")
+
+            return ["Week 1", "Week 2", "Week 3", "Week 4"].compactMap { week in
+                if let group = grouped[week] {
+                    let total = group.reduce(0) { $0 + Int($1.stepCount) }
+                    print("\(week): \(total) steps")
+                    return ChartEntry(label: week, stepCount: total)
+                } else {
+                    return ChartEntry(label: week, stepCount: 0)
+                }
             }
+
         }
     }
     
