@@ -23,9 +23,8 @@ class SettingsController: ObservableObject {
             }
         }
     
-    @Published var dailyStepGoal: Int {
-        didSet { UserDefaults.standard.set(dailyStepGoal, forKey: "dailyStepGoal") }
-    }
+    @Published var dailyStepGoal: Int = 0
+
     
     @Published var selectedUnits: String {
         didSet {
@@ -105,14 +104,24 @@ class SettingsController: ObservableObject {
             }
         }
     
-    func checkIfValidGoal() -> Bool {
-        return self.dailyStepGoal >= 1000 && self.dailyStepGoal <= 100000
+    func submitGoal() {
+        UserDefaults.standard.set(dailyStepGoal, forKey: "dailyStepGoal")
+        showTemporaryStatusMessage("Goal updated successfully!")
     }
+
+
+    
+    func checkIfValidGoal() -> Bool {
+        return self.dailyStepGoal >= 1000 && self.dailyStepGoal <= 15000
+    }
+
     
     func checkIfValidUnits() -> Bool {
         let validUnits = ["kms", "miles"]
         return validUnits.contains(self.selectedUnits.lowercased())
     }
+    
+    
     
     func deleteHistory() {
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = StepDataEntry.fetchRequest()

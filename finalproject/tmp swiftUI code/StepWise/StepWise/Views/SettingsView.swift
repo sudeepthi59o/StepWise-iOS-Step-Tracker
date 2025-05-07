@@ -11,6 +11,9 @@ struct SettingsView: View {
     @ObservedObject var settingsController: SettingsController
     @FocusState private var isStepGoalFocused: Bool
     
+    @State private var showInvalidGoalAlert = false
+
+    
     var body: some View {
         ZStack {
             LinearGradient(gradient: Gradient(colors: [.mint, .cyan]),
@@ -92,14 +95,22 @@ struct SettingsView: View {
             
             Button(action: {
                 if settingsController.checkIfValidGoal() {
+                    settingsController.submitGoal()
                     settingsController.notificationStatusMessage = "Goal updated successfully!"
                     DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
                         settingsController.notificationStatusMessage = nil
                     }
+                }else{
+                    showInvalidGoalAlert = true
                 }
             }) {
                 Label("Submit Goal", systemImage: "checkmark.circle.fill")
                     .foregroundColor(.blue)
+            }
+            .alert("Invalid Step Goal", isPresented: $showInvalidGoalAlert) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text("Step goal too high. Please enter a value between 1,000 and 15,000.")
             }
         }
         .listRowBackground(Color.white.opacity(0.2))
