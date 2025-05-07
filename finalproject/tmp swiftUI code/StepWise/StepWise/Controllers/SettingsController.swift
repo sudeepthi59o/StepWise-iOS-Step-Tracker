@@ -8,14 +8,57 @@
 
 import Foundation
 import CoreData
+import UserNotifications
 
 class SettingsController: ObservableObject {
     
     private let context: NSManagedObjectContext
     
     @Published var toggleOn: Bool {
-        didSet { UserDefaults.standard.set(toggleOn, forKey: "toggleOn") }
-    }
+            didSet {
+                UserDefaults.standard.set(toggleOn, forKey: "toggleOn")
+                handleNotificationToggleChange()
+            }
+        }
+        
+    
+    func handleNotificationToggleChange() {
+            if toggleOn {
+                enableNotifications()
+            } else {
+                disableNotifications()
+            }
+        }
+    
+    private func enableNotifications() {
+            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+                if granted {
+                    let content = UNMutableNotificationContent()
+                    content.title = "Notifications Enabled"
+                    content.body = "You will now receive daily reminders."
+                    content.sound = .default
+
+                    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+                    let request = UNNotificationRequest(identifier: "notificationEnabled", content: content, trigger: trigger)
+                    UNUserNotificationCenter.current().add(request)
+                }
+            }
+        }
+    
+    private func disableNotifications() {
+           UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+           
+           let content = UNMutableNotificationContent()
+           content.title = "Notifications Disabled"
+           content.body = "You will no longer receive daily reminders."
+           content.sound = .default
+
+           let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+           let request = UNNotificationRequest(identifier: "notificationDisabled", content: content, trigger: trigger)
+           UNUserNotificationCenter.current().add(request)
+       }
+    
+    
     
     @Published var dailyStepGoal: Int {
         didSet { UserDefaults.standard.set(dailyStepGoal, forKey: "dailyStepGoal") }
@@ -27,7 +70,12 @@ class SettingsController: ObservableObject {
     
     init(context: NSManagedObjectContext) {
         self.context=context
-        self.toggleOn = UserDefaults.standard.bool(forKey: "toggleOn")
+        if UserDefaults.standard.object(forKey: "toggleOn") == nil {
+                self.toggleOn = true
+                UserDefaults.standard.set(true, forKey: "toggleOn")
+            } else {
+                self.toggleOn = UserDefaults.standard.bool(forKey: "toggleOn")
+            }
         self.dailyStepGoal = UserDefaults.standard.integer(forKey: "dailyStepGoal")
         self.selectedUnits = UserDefaults.standard.string(forKey: "selectedUnits") ?? "kms"
     }

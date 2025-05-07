@@ -162,7 +162,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = M2C28VH4J7;
+				DEVELOPMENT_TEAM = 7BTVUBLB7D;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StepWiseApp/Info.plist;
 				INFOPLIST_KEY_NSMotionUsageDescription = "We need access to your motion activity to count your steps.\n";
@@ -191,7 +191,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = M2C28VH4J7;
+				DEVELOPMENT_TEAM = 7BTVUBLB7D;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StepWiseApp/Info.plist;
 				INFOPLIST_KEY_NSMotionUsageDescription = "We need access to your motion activity to count your steps.\n";

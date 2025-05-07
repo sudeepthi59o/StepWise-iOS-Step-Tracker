@@ -6,26 +6,18 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		CB13BA752DC9C05700B7A1F3 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB13BA742DC9C05700B7A1F3 /* UserNotifications.framework */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		727013FB2DBE994B0073EF4C /* StepWiseApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StepWiseApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CB13BA742DC9C05700B7A1F3 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		7270140D2DBE994E0073EF4C /* Exceptions for "StepWiseApp" folder in "StepWiseApp" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = 727013FA2DBE994B0073EF4C /* StepWiseApp */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		727013FD2DBE994B0073EF4C /* StepWiseApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				7270140D2DBE994E0073EF4C /* Exceptions for "StepWiseApp" folder in "StepWiseApp" target */,
-			);
 			path = StepWiseApp;
 			sourceTree = "<group>";
 		};
@@ -36,6 +28,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CB13BA752DC9C05700B7A1F3 /* UserNotifications.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -46,6 +39,7 @@
 			isa = PBXGroup;
 			children = (
 				727013FD2DBE994B0073EF4C /* StepWiseApp */,
+				CB13BA732DC9C05600B7A1F3 /* Frameworks */,
 				727013FC2DBE994B0073EF4C /* Products */,
 			);
 			sourceTree = "<group>";
@@ -56,6 +50,14 @@
 				727013FB2DBE994B0073EF4C /* StepWiseApp.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		CB13BA732DC9C05600B7A1F3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CB13BA742DC9C05700B7A1F3 /* UserNotifications.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -107,6 +109,8 @@
 			);
 			mainGroup = 727013F22DBE994B0073EF4C;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 727013FC2DBE994B0073EF4C /* Products */;
 			projectDirPath = "";
